@@ -2,16 +2,14 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: 'Air Strip Arabic';
-  src: url('./assets/fonts/AirStripArabic-Regular.woff2') format('woff2');
-  font-weight: 400;
+  font-family: "RH Zak";
+  src: url("/fonts/RHZak-Regular.woff2") format("woff2");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'RH Zak';
-  src: url('./assets/fonts/RHZak-Regular.woff2') format('woff2');
-  font-weight: 400;
+  font-family: "Air Strip Arabic";
+  src: url("/fonts/AirStripArabic-Regular.woff2") format("woff2");
   font-display: swap;
 }
 
