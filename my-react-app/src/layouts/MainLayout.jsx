@@ -1,10 +1,10 @@
 import Footer from "../components/Footer";
-import Topbar from "../components/Topbar";
+import Header from "../components/Header";
 
 function MainLayout({ children }) {
   return (
     <div dir="rtl" className="min-h-screen bg-brand-light font-body text-brand-text">
-      <Topbar />
+      <Header />
 
       <main className="p-5">{children}</main>
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom"; // ✅ added useParams
 
 /*import { useRole } from "../context/RoleContext";*/
 import StarRating from "../components/StarRating";
@@ -8,8 +8,6 @@ import {
   PRODUCT_TYPE_LABELS,
   STATUS_LABELS,
 } from "../data/productData";
-
-const FALLBACK_ID = "react-course";
 
 /* ---------- small shared helpers ---------- */
 
@@ -568,6 +566,8 @@ function CapabilityForm({ product, onClose }) {
 
 /* ---------- demo bar: lets the team test product × role without full wiring ---------- */
 
+const DEMO_PRODUCT_TYPES = ["course", "camp", "competition", "trainer"];
+
 function DemoBar({ product, viewerRole, onChangeRole }) {
   const navigate = useNavigate();
 
@@ -580,20 +580,25 @@ function DemoBar({ product, viewerRole, onChangeRole }) {
     admin: "إدارة",
   };
 
+  function goToType(type) {
+    const item = Object.values(PRODUCTS).find((entry) => entry.type === type);
+    if (item) navigate(`/program/${item.id}`);
+  }
+
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-dashed border-brand-border bg-brand-white p-4 md:flex-row md:items-center md:justify-between">
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-xs font-bold text-brand-muted">المنتج:</span>
-        {Object.values(PRODUCTS).map((item) => (
+        {DEMO_PRODUCT_TYPES.map((type) => (
           <button
-            key={item.id}
+            key={type}
             type="button"
-            onClick={() => navigate(`/program/${item.id}`)}
+            onClick={() => goToType(type)}
             className={`rounded-full px-3 py-1 text-xs font-bold transition ${
-              item.id === product.id ? "bg-brand-main text-white" : "bg-brand-light text-brand-muted"
+              type === product.type ? "bg-brand-main text-white" : "bg-brand-light text-brand-muted"
             }`}
           >
-            {PRODUCT_TYPE_LABELS[item.type]}
+            {PRODUCT_TYPE_LABELS[type]}
           </button>
         ))}
       </div>
@@ -620,8 +625,8 @@ function DemoBar({ product, viewerRole, onChangeRole }) {
 /* ---------- the page ---------- */
 
 export default function ProgramDetails() {
-  const { id } = useParams();
-  const product = PRODUCTS[id] ?? PRODUCTS[FALLBACK_ID];
+  const { id } = useParams(); // ✅ now imported correctly
+  const product = PRODUCTS[id]; // ✅ no more silent fallback to "react-course"
 
   // Local "who is viewing" state — completely separate from the dashboard role.
   // Swap this for real auth later; it never touches RoleContext.
@@ -630,7 +635,26 @@ export default function ProgramDetails() {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
-  
+
+  // ✅ real "not found" state instead of quietly showing an unrelated product
+  if (!product) {
+    return (
+      <section className="mx-auto flex max-w-2xl flex-col items-center gap-3 py-20 text-center">
+        <h2 className="text-2xl font-bold text-brand-text">لم يتم العثور على البرنامج</h2>
+        <p className="text-sm text-brand-muted">
+          تحقق من الرابط، أو تصفّح البرامج المتاحة من صفحة البرامج.
+        </p>
+        <button
+          type="button"
+          onClick={() => window.history.back()}
+          className="mt-2 rounded-lg bg-brand-main px-4 py-2 text-sm font-bold text-white hover:opacity-90"
+        >
+          العودة
+        </button>
+      </section>
+    );
+  }
+
   return (
     <section className="mx-auto flex max-w-6xl flex-col gap-5">
       {/* Remove <DemoBar /> once real routing + auth are wired */}

@@ -1,4 +1,5 @@
 import { ABOUT_DATA } from "../data/aboutData";
+import { useNavigate } from "react-router-dom";
 
 function OverviewSection({ overview }) {
   return (
@@ -147,6 +148,9 @@ function FaqSection({ faq }) {
 }
 
 function ContactCta({ cta }) {
+
+  const navigate = useNavigate();
+
   return (
     <div className="rounded-2xl border border-brand-border bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] p-8 text-white">
       <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-right">
@@ -159,6 +163,7 @@ function ContactCta({ cta }) {
           <button
             type="button"
             className="rounded-lg bg-brand-main px-4 py-2 text-sm font-bold text-white transition hover:opacity-90"
+            onClick={() => navigate("/contact") }
           >
             {cta.primaryLabel}
           </button>

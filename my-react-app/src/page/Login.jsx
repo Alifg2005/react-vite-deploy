@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [remember, setRemember] = useState(false);
 
   const handleSubmit = (e) => {
@@ -144,6 +146,7 @@ export default function Login() {
             <button
               type="submit"
               className="w-full rounded-2xl bg-gradient-to-r from-[#006B8F] to-[#19C3D8] py-4 text-lg font-bold text-white transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+              onClick={() => navigate("/home") }
             >
               تسجيل الدخول
             </button>

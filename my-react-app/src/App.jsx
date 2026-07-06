@@ -1,15 +1,18 @@
-import { Routes, Route, Navigate } from "react-router";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import MainLayout from "./layouts/MainLayout";
 
 // pages
-import MainLayout from "./layouts/MainLayout";
-import Dashboard from "./page/Dashboard";
+import HomePage from "./page/HomePage";
 import AboutPage from "./page/AboutPage";
-// import ProgramDetails from "./page/ProgramDetails"
-import PaymentPage from "./page/PaymentPage"
-import CourseCatalogue from "./page/CourseCatalogue"
-import Login from "./page/Login"
-import RegisterPage from "./page/RegisterPage"
-import Forgotpassword from "./page/Forgotpassword"
+import Contact from "./page/Contact";
+import CourseCatalogue from "./page/CourseCatalogue";
+import ProgramDetails from "./page/ProgramDetails";
+import Dashboard from "./page/Dashboard";
+import PaymentPage from "./page/PaymentPage";
+import Login from "./page/Login";
+import RegisterPage from "./page/RegisterPage";
+import Forgotpassword from "./page/Forgotpassword";
 
 import { RoleProvider } from "./context/RoleContext";
 
@@ -18,21 +21,23 @@ function App() {
     <RoleProvider>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/payment" element={<PaymentPage/>}/>
-          <Route path="/courseCatalogue" element={<CourseCatalogue/>}/>
-          <Route path="/Forgotpassword" element={<Forgotpassword/>}/>
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/course-catalogue" element={<CourseCatalogue />} />
 
-          <Route path="/Login" element={<Login/>}/>
-          <Route path="/RegisterPage" element={<RegisterPage/>}/>
-
-          {/* Program Details — /program/:id opens a specific product */}
-          {/* <Route path="/program" element={<ProgramDetails />} />
+          {/* Program Details — /program/:id opens a specific course/camp/competition */}
+        
           <Route path="/program/:id" element={<ProgramDetails />} />
-          
-          {/* If the user enters a wrong URL, send them back to Dashboard */}
+
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/payment" element={<PaymentPage />} />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<Forgotpassword />} />
+
+          {/* Unknown URL → send back to Home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </MainLayout>

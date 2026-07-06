@@ -57,7 +57,7 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute end-0 z-20 mt-2 w-80 rounded-2xl border border-brand-border bg-brand-white p-4 text-right shadow-xl">
+        <div className="absolute inset-e-0 z-20 mt-2 w-80 rounded-2xl border border-brand-border bg-brand-white p-4 text-right shadow-xl">
           <div className="mb-4 flex items-center gap-3">
             {avatar ? (
               <img src={avatar} alt="" className="h-12 w-12 rounded-lg object-cover" />

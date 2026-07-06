@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -40,7 +42,7 @@ export default function Register() {
       <div className="w-full max-w-7xl bg-white rounded-3xl shadow-2xl overflow-hidden grid lg:grid-cols-2">
 
         {/* Left Section */}
-        <div className="hidden lg:flex bg-gradient-to-br from-brand-main to-cyan-500 items-center justify-center relative p-12">
+        <div className="hidden lg:flex bg-linear-to-br from-brand-main to-cyan-500 items-center justify-center relative p-12">
 
           <img
             src="/CAPSULE_TAHAWUL.png"
@@ -207,7 +209,9 @@ export default function Register() {
 
             <button
               type="submit"
-              className="w-full rounded-xl bg-brand-main py-3 text-lg font-bold text-white hover:opacity-90 transition"
+              className="w-full rounded-xl bg-brand-main py-3 text-lg font-bold text-white hover:opacity-90 transition" 
+              onClick={() => navigate("/HomePage") }
+
             >
               إنشاء الحساب
             </button>
