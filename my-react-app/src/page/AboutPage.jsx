@@ -13,9 +13,13 @@ import SharedCard from "../components/SharedCard";
  * light-mode regardless of the active theme.
  *
  * Fix applied here: added `dark:` utility classes to every background,
- * text, border, badge, and shadow so the section responds to the `.dark`
+ * text, border, and shadow so the section responds to the `.dark`
  * class on <html>. Layout, spacing, grid structure and responsiveness are
  * unchanged — only color-related classes were touched.
+ *
+ * NOTE: `bg-brand-main` (the accent badges) is intentionally left as-is in
+ * both light and dark mode per request — it's the page's main brand color
+ * and should not be altered.
  *
  * IMPORTANT (outside this file):
  * 1. Confirm tailwind.config.js has `darkMode: 'class'` (not 'media').
@@ -71,9 +75,9 @@ function MissionVisionSection({ items }) {
           key={item.title}
           className="flex h-full flex-col rounded-2xl border border-brand-border bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:shadow-none"
         >
-          {/* Badge: kept brand-main bg (it's already a strong accent color
-              that reads fine on dark backgrounds), just ensured text stays white */}
-          <span className="mb-3 inline-block w-fit rounded-full bg-brand-main px-3 py-1 text-xs font-bold text-white dark:bg-brand-main/90">
+          {/* Badge: bg-brand-main left untouched in both themes per request —
+              it's the site's main accent color and should not change */}
+          <span className="mb-3 inline-block w-fit rounded-full bg-brand-main px-3 py-1 text-xs font-bold text-white">
             {item.title}
           </span>
           <p className="text-sm text-brand-muted dark:text-slate-300">
@@ -94,7 +98,7 @@ function GoalsSection({ goals }) {
             key={goal}
             className="flex h-full items-start gap-3 rounded-xl border border-brand-border bg-brand-white p-4 dark:border-slate-700 dark:bg-slate-800"
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-main text-sm font-bold text-white dark:bg-brand-main/90">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-main text-sm font-bold text-white">
               {index + 1}
             </span>
             <p className="text-sm text-brand-muted dark:text-slate-300">
