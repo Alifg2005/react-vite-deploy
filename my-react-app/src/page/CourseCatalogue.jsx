@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { PRODUCTS, PRODUCT_TYPE_LABELS } from "../data/productData";
 import ProductCard from "../components/ProductCard";
 import CatalogueFilters from "../components/CatalogueFilters";
+import { useRole } from "../context/RoleContext";
 
 // Which product types each viewer is allowed to see in the catalogue.
 // Students & guests: only courses / camps / competitions.
@@ -11,7 +13,7 @@ import CatalogueFilters from "../components/CatalogueFilters";
 const VISIBLE_TYPES_BY_ROLE = {
   guest: ["course", "camp", "competition"],
   student: ["course", "camp", "competition"],
-  couch: ["course", "camp", "competition"],
+  trainer: ["course", "camp", "competition"],
   company: ["course", "camp", "competition"],
   admin: ["course", "camp", "competition", "trainer", "project"],
 };
@@ -19,48 +21,22 @@ const VISIBLE_TYPES_BY_ROLE = {
 // Statuses that count as "hidden" and should never appear in the catalogue.
 const HIDDEN_STATUSES = ["closed"];
 
-/* ---------- user display tester (same scaffold as Program Details) ---------- */
-
-function DisplayTester({ viewerRole, onChangeRole }) {
-  const roles = ["guest", "student", "couch", "company", "admin"];
-  const roleLabels = {
-    guest: "زائر",
-    student: "طالب",
-    couch: "مدرب",
-    company: "شركة",
-    admin: "إدارة",
-  };
-
-  return (
-    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-dashed border-brand-border bg-brand-white p-4">
-      <span className="text-xs font-bold text-brand-muted">عرض بصفة:</span>
-      {roles.map((r) => (
-        <button
-          key={r}
-          type="button"
-          onClick={() => onChangeRole(r)}
-          className={`rounded-full px-3 py-1 text-xs font-bold transition ${
-            r === viewerRole ? "bg-brand-dark text-white" : "bg-brand-light text-brand-muted"
-          }`}
-        >
-          {roleLabels[r]}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 /* ---------- the page ---------- */
 
 export default function CourseCatalogue() {
-  // Remove viewerRole + <DisplayTester /> once real auth is wired.
-  const [viewerRole, setViewerRole] = useState("guest");
+  const { role } = useRole();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState(searchParams.get("type") ?? "all");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const allowedTypes = VISIBLE_TYPES_BY_ROLE[viewerRole] ?? VISIBLE_TYPES_BY_ROLE.guest;
+  function handleTypeChange(nextType) {
+    setTypeFilter(nextType);
+    setSearchParams(nextType === "all" ? {} : { type: nextType });
+  }
+
+  const allowedTypes = VISIBLE_TYPES_BY_ROLE[role] ?? VISIBLE_TYPES_BY_ROLE.guest;
 
   // Derive the visible list. useMemo so we don't re-filter on every unrelated render.
   const visibleProducts = useMemo(() => {
@@ -98,9 +74,6 @@ export default function CourseCatalogue() {
 
   return (
     <section className="mx-auto flex max-w-6xl flex-col gap-5">
-      {/* Remove <DisplayTester /> once real auth is wired */}
-      <DisplayTester viewerRole={viewerRole} onChangeRole={setViewerRole} />
-
       {/* hero */}
       <div className="rounded-2xl border border-brand-border bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] p-8 text-white">
         <h2 className="mb-2 text-3xl font-bold text-white md:text-4xl">استكشف البرامج</h2>
@@ -113,7 +86,7 @@ export default function CourseCatalogue() {
         search={search}
         onSearchChange={setSearch}
         typeFilter={typeFilter}
-        onTypeChange={setTypeFilter}
+        onTypeChange={handleTypeChange}
         statusFilter={statusFilter}
         onStatusChange={setStatusFilter}
       />

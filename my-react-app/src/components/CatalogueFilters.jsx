@@ -21,12 +21,12 @@ export default function CatalogueFilters({
   onStatusChange,
 }) {
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-brand-border bg-brand-white p-4">
+    <div className="flex flex-col gap-4 border-brand-border bg-brand-light p-4">
       <input
         value={search}
         onChange={(event) => onSearchChange(event.target.value)}
         placeholder="ابحث باسم البرنامج أو المدرب..."
-        className="w-full rounded-lg border border-brand-border bg-brand-light px-4 py-3 text-sm"
+        className="w-full rounded-lg border border-brand-border bg-brand-white px-4 py-3 text-sm"
       />
 
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -40,7 +40,7 @@ export default function CatalogueFilters({
               className={`rounded-full px-3 py-1 text-xs font-bold transition ${
                 typeFilter === filter.value
                   ? "bg-brand-main text-white"
-                  : "bg-brand-light text-brand-muted"
+                  : "bg-brand-white text-brand-muted"
               }`}
             >
               {filter.label}
@@ -58,7 +58,7 @@ export default function CatalogueFilters({
               className={`rounded-full px-3 py-1 text-xs font-bold transition ${
                 statusFilter === filter.value
                   ? "bg-brand-dark text-white"
-                  : "bg-brand-light text-brand-muted"
+                  : "bg-brand-white text-brand-muted"
               }`}
             >
               {filter.label}

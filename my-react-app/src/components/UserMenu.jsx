@@ -1,39 +1,48 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRole } from "../context/RoleContext";
 import { DASHBOARD_DATA } from "../data/dashboardData";
 
+const LAST_ROLE_KEY = "ct_last_role";
+
+function UserIcon({ className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <circle cx="12" cy="8" r="3.6" />
+      <path d="M4.5 19.5c0-3.9 3.4-6 7.5-6s7.5 2.1 7.5 6" />
+    </svg>
+  );
+}
+
 export default function UserMenu() {
-  const { role } = useRole();
+  const navigate = useNavigate();
+  const { role, setRole, profile } = useRole();
   const dashboard = DASHBOARD_DATA[role];
 
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("profile");
-  const [avatar, setAvatar] = useState(null);
-  const [profile, setProfile] = useState({
-    name: dashboard.user.name,
-    email: "user@capsule.sa",
-    phone: "+966 5X XXX XXXX",
-    paymentMethod: "مدى",
-    cardNumber: "**** **** **** 1234",
-  });
 
-  const fileInputRef = useRef(null);
-  const initial = profile.name.trim().charAt(0);
-
-  function handleFileChange(event) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => setAvatar(reader.result);
-    reader.readAsDataURL(file);
+  function goTo(path) {
+    setOpen(false);
+    navigate(path);
   }
 
-  function updateProfile(field, value) {
-    setProfile((current) => ({
-      ...current,
-      [field]: value,
-    }));
+  function handleLogout() {
+    // Go straight to /login rather than "/" — logging out from /dashboard
+    // would end up there anyway via the dashboard's own guest guard, so
+    // this avoids a redirect race and gives a consistent destination
+    // regardless of which page logout was triggered from.
+    localStorage.removeItem(LAST_ROLE_KEY);
+    setOpen(false);
+    setRole("guest");
+    navigate("/login");
   }
 
   return (
@@ -41,14 +50,12 @@ export default function UserMenu() {
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className="flex items-center gap-2 rounded-full border border-brand-border bg-brand-white py-1 ps-1 pe-3 hover:bg-brand-light"
+        className="flex items-center gap-2 rounded-full border border-brand-border bg-brand-white py-2 ps-3 pe-4 hover:bg-brand-light"
       >
-        {avatar ? (
-          <img src={avatar} alt="" className="h-8 w-8 rounded-lg object-cover" />
+        {profile.avatar ? (
+          <img src={profile.avatar} alt="" className="h-6 w-6 rounded-full object-cover" />
         ) : (
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-main text-sm font-bold text-white">
-            {initial}
-          </span>
+          <UserIcon className="h-5 w-5 text-brand-main" />
         )}
 
         <span className="hidden text-sm font-bold text-brand-text sm:inline">
@@ -57,111 +64,55 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute inset-e-0 z-20 mt-2 w-80 rounded-2xl border border-brand-border bg-brand-white p-4 text-right shadow-xl">
-          <div className="mb-4 flex items-center gap-3">
-            {avatar ? (
-              <img src={avatar} alt="" className="h-12 w-12 rounded-lg object-cover" />
+        <div className="absolute inset-e-0 z-20 mt-2 w-64 rounded-2xl border border-brand-border bg-brand-white p-3 text-right shadow-xl">
+          <div className="mb-3 flex items-center gap-3 border-b border-brand-border pb-3">
+            {profile.avatar ? (
+              <img src={profile.avatar} alt="" className="h-11 w-11 rounded-full object-cover" />
             ) : (
-              <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-main text-lg font-bold text-white">
-                {initial}
+              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-brand-border">
+                <UserIcon className="h-7 w-7 text-brand-main" />
               </span>
             )}
 
             <div>
               <p className="text-sm font-bold text-brand-text">{profile.name}</p>
-              <p className="text-xs text-brand-muted">الملف الشخصي</p>
+              <p className="text-xs text-brand-muted">{dashboard.title}</p>
             </div>
           </div>
 
-          <div className="mb-4 grid grid-cols-2 gap-2 rounded-full bg-brand-light p-1">
+          <div className="flex flex-col gap-1">
             <button
               type="button"
-              onClick={() => setActiveTab("profile")}
-              className={`rounded-full px-3 py-2 text-sm font-bold ${
-                activeTab === "profile" ? "bg-brand-main text-white" : "text-brand-muted"
-              }`}
+              onClick={() => goTo("/dashboard")}
+              className="rounded-lg px-3 py-2 text-right text-sm font-bold text-brand-text hover:bg-brand-light"
             >
-              البيانات
+              {dashboard.title}
             </button>
 
             <button
               type="button"
-              onClick={() => setActiveTab("payment")}
-              className={`rounded-full px-3 py-2 text-sm font-bold ${
-                activeTab === "payment" ? "bg-brand-main text-white" : "text-brand-muted"
-              }`}
+              onClick={() => goTo("/profile")}
+              className="rounded-lg px-3 py-2 text-right text-sm font-bold text-brand-text hover:bg-brand-light"
             >
-              الدفع
+              الملف الشخصي
+            </button>
+
+            <button
+              type="button"
+              onClick={() => goTo("/account-settings")}
+              className="rounded-lg px-3 py-2 text-right text-sm font-bold text-brand-text hover:bg-brand-light"
+            >
+              الإعدادات
+            </button>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="rounded-lg px-3 py-2 text-right text-sm font-bold text-rose-600 hover:bg-rose-50"
+            >
+              تسجيل الخروج
             </button>
           </div>
-
-          {activeTab === "profile" ? (
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="rounded-lg border border-brand-border px-3 py-2 text-sm font-bold text-brand-text hover:bg-brand-light"
-              >
-                تغيير الصورة
-              </button>
-
-              <input
-                value={profile.name}
-                onChange={(event) => updateProfile("name", event.target.value)}
-                className="rounded-lg border border-brand-border bg-brand-light px-3 py-2 text-sm"
-                placeholder="الاسم"
-              />
-
-              <input
-                value={profile.email}
-                onChange={(event) => updateProfile("email", event.target.value)}
-                className="rounded-lg border border-brand-border bg-brand-light px-3 py-2 text-sm"
-                placeholder="البريد الإلكتروني"
-              />
-
-              <input
-                value={profile.phone}
-                onChange={(event) => updateProfile("phone", event.target.value)}
-                className="rounded-lg border border-brand-border bg-brand-light px-3 py-2 text-sm"
-                placeholder="رقم الجوال"
-              />
-            </div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <select
-                value={profile.paymentMethod}
-                onChange={(event) => updateProfile("paymentMethod", event.target.value)}
-                className="rounded-lg border border-brand-border bg-brand-light px-3 py-2 text-sm"
-              >
-                <option>مدى</option>
-                <option>Visa</option>
-                <option>تحويل بنكي</option>
-              </select>
-
-              <input
-                value={profile.cardNumber}
-                onChange={(event) => updateProfile("cardNumber", event.target.value)}
-                className="rounded-lg border border-brand-border bg-brand-light px-3 py-2 text-sm"
-                placeholder="رقم البطاقة"
-              />
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="mt-4 w-full rounded-lg bg-brand-main px-3 py-2 text-sm font-bold text-white"
-          >
-            حفظ التغييرات
-          </button>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileChange}
-          />
         </div>
       )}
     </div>

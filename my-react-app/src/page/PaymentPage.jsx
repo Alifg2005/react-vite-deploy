@@ -70,7 +70,7 @@ export default function PaymentPage() {
           expiry={expiry} setExpiry={setExpiry}
           cvv={cvv} setCvv={setCvv}
           loading={loading} error={error} successMessage={successMessage}
-          handleSubmit={handlePaymentSubmit} price={currentProgram.price}
+          handleSubmit={handlePaymentSubmit} 
         />
 
         {/* 3. Invoice price presentation module panel */}

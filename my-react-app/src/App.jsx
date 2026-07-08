@@ -13,6 +13,8 @@ import PaymentPage from "./page/PaymentPage";
 import Login from "./page/Login";
 import RegisterPage from "./page/RegisterPage";
 import Forgotpassword from "./page/Forgotpassword";
+import Profile from "./page/Profile";
+import AccountSettings from "./page/AccountSettings";
 
 import { RoleProvider } from "./context/RoleContext";
 
@@ -31,7 +33,9 @@ function App() {
           <Route path="/program/:id" element={<ProgramDetails />} />
 
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/account-settings" element={<AccountSettings />} />
+          <Route path="/payment/:id" element={<PaymentPage />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterPage />} />

@@ -2,14 +2,16 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: "RH Zak";
-  src: url("/fonts/RHZak-Regular.woff2") format("woff2");
+  font-family: 'Air Strip Arabic';
+  src: url('./assets/fonts/AirStripArabic-Regular.woff2') format('woff2');
+  font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Air Strip Arabic";
-  src: url("/fonts/AirStripArabic-Regular.woff2") format("woff2");
+  font-family: 'RH Zak';
+  src: url('./assets/fonts/RHZak-Regular.woff2') format('woff2');
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -27,6 +29,22 @@
   --c-hero-start: #7fb8b8;
   --c-hero-middle: #1394a0;
   --c-hero-end: #076b7c;
+}
+
+/* Dark theme — toggled by ThemeToggle via the .dark class on <html> */
+:root.dark {
+  --c-brand-dark: #0a2e35;
+  --c-brand-main: #1fb8c7;
+  --c-brand-soft: #2d6b6f;
+  --c-brand-light: #0b1e22;
+  --c-brand-white: #122b30;
+  --c-brand-text: #e6f3f5;
+  --c-brand-muted: #93b0b6;
+  --c-brand-border: #234b52;
+
+  --c-hero-start: #12484f;
+  --c-hero-middle: #0e6a75;
+  --c-hero-end: #063a42;
 }
 
 

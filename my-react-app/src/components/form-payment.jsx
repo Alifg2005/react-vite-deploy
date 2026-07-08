@@ -1,19 +1,20 @@
 import React from "react";
+import SharedCard from "./SharedCard";
 
 // Payment form component handling user input and states
-export default function FormPayment({ 
-  cardNumber, setCardNumber, 
-  cardName, setCardName, 
-  expiry, setExpiry, 
-  cvv, setCvv, 
-  loading, error, successMessage, handleSubmit, price 
+export default function FormPayment({
+  cardNumber, setCardNumber,
+  cardName, setCardName,
+  expiry, setExpiry,
+  cvv, setCvv,
+  loading, error, successMessage, handleSubmit, price
 }) {
   return (
-    /* Form wrapper layout */
-    <div className="rounded-2xl border border-[#C9D6DF] bg-white p-6 shadow-sm lg:col-span-7">
-      <h3 className="mb-1 text-xl font-bold text-[#164961]">معلومات بطاقة الدفع</h3>
-      <p className="mb-6 text-xs text-[#706F6F]">جميع البيانات يتم التحقق منها عبر الدالات غير المتزامنة لضمان محاكاة تأخير الشبكة.</p>
-
+    <SharedCard
+      title="معلومات بطاقة الدفع"
+      subtitle="جميع البيانات يتم التحقق منها عبر الدالات غير المتزامنة لضمان محاكاة تأخير الشبكة."
+      className="shadow-sm lg:col-span-7"
+    >
       {/* Conditionally rendered feedback messages */}
       {error && <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">⚠️ {error}</div>}
       {successMessage && <div className="mb-4 rounded-xl border border-green-200 bg-green-50 p-4 text-sm font-semibold text-green-700">{successMessage}</div>}
@@ -52,10 +53,10 @@ export default function FormPayment({
 
         {/* Dynamic submit action button */}
         <button type="submit" disabled={loading} className="mt-4 rounded-xl bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] py-3.5 text-lg font-bold text-white transition-all hover:opacity-95 active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none">
-          {loading ? "جاري الاتصال والتحقق بالشبكة..." : `تأكيد وحجز المقعد — ${price}`}
+          {loading ? "جاري الاتصال والتحقق بالشبكة..." : `تأكيد وحجز المقعد `}
         </button>
 
       </form>
-    </div>
+    </SharedCard>
   );
 }

@@ -33,11 +33,7 @@ export const DASHBOARD_DATA = {
     ],
     chart: null,
     participants: 1280,
-    projects: [
-      { title: "منصة متجر إلكتروني", date: "2026-04-12", status: "مقبول" },
-      { title: "تطبيق تتبع اللياقة", date: "2026-05-03", status: "قيد المراجعة" },
-      { title: "بوت دردشة للدعم الفني", date: "2026-06-18", status: "مقبول" },
-    ],
+    
   },
   company: {
     title: "لوحة الشركة",

@@ -1,6 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthLayout from "../components/AuthLayout";
+
+const FIELD_CLASS =
+  "w-full rounded-2xl border border-brand-border bg-brand-white px-5 py-4 text-brand-text transition duration-300 outline-none focus:border-brand-main focus:ring-4 focus:ring-brand-light";
+
+const SUBMIT_CLASS =
+  "w-full rounded-2xl bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] py-4 text-lg font-bold text-white transition duration-300 hover:-translate-y-1 hover:shadow-xl disabled:opacity-50";
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -14,74 +23,35 @@ export default function ForgotPassword() {
     setTimeout(() => {
       setLoading(false);
       setSent(true);
-    }, 2000);
+    }, 1200);
   };
 
-  if (sent) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-brand-light px-6">
-        <div className="w-full max-w-md rounded-3xl bg-white p-10 shadow-2xl text-center">
-
-          <img
-            src="/CAPSULE_TAHAWUL.png"
-            alt="Capsule Tahawul"
-            className="mx-auto h-16 mb-6"
-          />
-
-          <div className="text-6xl mb-5">📧</div>
-
-          <h1 className="text-3xl font-bold text-brand-text">
-            تم إرسال الرابط
-          </h1>
-
-          <p className="mt-4 text-gray-500 leading-7">
-            إذا كان البريد الإلكتروني مسجلاً لدينا،
-            فسيصلك رابط إعادة تعيين كلمة المرور خلال دقائق.
-          </p>
+  return (
+    <AuthLayout
+            backTo="/login"
+      panelTitle="استعادة كلمة المرور"
+      panelSubtitle="لا تقلق، سنساعدك على العودة إلى حسابك في كبسولة تحول خلال دقائق."
+      heading="نسيت كلمة المرور؟"
+      subheading="أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور."
+    >
+      {sent ? (
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center text-emerald-800 font-semibold leading-7">
+            تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني.
+          </div>
 
           <button
-            className="mt-8 w-full rounded-xl bg-brand-main py-3 text-white font-bold hover:opacity-90 transition"
+            type="button"
+            onClick={() => navigate("/login")}
+            className={SUBMIT_CLASS}
           >
-            العودة إلى تسجيل الدخول
+            العودة لتسجيل الدخول
           </button>
-
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-brand-light px-6">
-
-      <div className="w-full max-w-md rounded-3xl bg-white shadow-2xl p-10">
-
-        <div className="text-center">
-
-          <img
-            src="/CAPSULE_TAHAWUL.png"
-            alt="Capsule Tahawul"
-            className="mx-auto h-16 mb-6"
-          />
-
-          <h1 className="text-3xl font-bold text-brand-text">
-            نسيت كلمة المرور؟
-          </h1>
-
-          <p className="mt-3 text-gray-500 leading-7">
-            أدخل بريدك الإلكتروني وسنرسل لك رابط
-            لإعادة تعيين كلمة المرور.
-          </p>
-
-        </div>
-
-        <form
-          onSubmit={handleSubmit}
-          className="mt-8 space-y-6"
-        >
-
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-
-            <label className="block mb-2 font-semibold">
+            <label className="block mb-2 font-semibold text-brand-text">
               البريد الإلكتروني
             </label>
 
@@ -91,31 +61,26 @@ export default function ForgotPassword() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-xl border border-brand-border px-4 py-3 outline-none focus:border-brand-main"
+              className={FIELD_CLASS}
             />
-
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-xl bg-brand-main py-3 text-lg font-bold text-white hover:opacity-90 transition disabled:opacity-50"
-          >
+          <button type="submit" disabled={loading} className={SUBMIT_CLASS}>
             {loading ? "جاري الإرسال..." : "إرسال رابط إعادة التعيين"}
           </button>
 
-          <button
-            type="button"
-            className="w-full rounded-xl border border-brand-border py-3 font-semibold text-brand-main hover:bg-brand-light transition"
-          >
-            العودة إلى تسجيل الدخول
-          </button>
-
+          <p className="text-center text-brand-muted">
+            تذكرت كلمة المرور؟
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="mr-2 font-bold text-brand-main hover:opacity-80"
+            >
+              العودة لتسجيل الدخول
+            </button>
+          </p>
         </form>
-
-      </div>
-
-    </div>
+      )}
+    </AuthLayout>
   );
 }
-

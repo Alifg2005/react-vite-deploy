@@ -15,37 +15,25 @@ import { useRole } from "../context/RoleContext";
 import { DASHBOARD_DATA } from "../data/dashboardData";
 import { PRODUCTS } from "../data/productData";
 import ProductCard from "../components/ProductCard";
+import Sidebar from "../components/dashboard-Sidebar";
+import SharedCard from "../components/SharedCard";
+import {
+  COMPLETED_ITEMS,
+  CURRENT_ACTIVITIES,
+  PENDING_PROGRAM_REQUESTS,
+  PENDING_USER_REQUESTS,
+  COMPLAINTS_SEED,
+  USER_GROWTH_DATA,
+  REPORT_ITEMS,
+} from "../data/dashboardMockData";
 
-// d
-import { useNavigate } from "react-router-dom";
-
-const completedItems = [
-  { type: "دورة", title: "أساسيات تطوير الواجهات", date: "2026-04-18" },
-  { type: "دورة", title: "مقدمة في React", date: "2026-05-02" },
-  { type: "معسكر", title: "معسكر بناء المواقع", date: "2026-05-20" },
-  { type: "شهادة", title: "شهادة إنجاز HTML و CSS", date: "2026-06-01" },
-];
+import { useNavigate, Navigate } from "react-router-dom";
 
 const COMPLETED_TYPE_FILTERS = [
   { value: "all", label: "الكل" },
   { value: "دورة", label: "دورة" },
   { value: "معسكر", label: "معسكر" },
   { value: "مسابقة", label: "مسابقة" },
-];
-
-// The student's in-progress enrollments — pulled from the shared catalogue
-// so the activity cards stay in sync with the program details pages.
-const CURRENT_ACTIVITIES = [
-  { id: "react-course", progress: 100 },
-  { id: "ui-design-course", progress: 45 },
-  { id: "html-css-course", progress: 100 },
-  { id: "react-beginners-course", progress: 20 },
-  { id: "js-fundamentals-course", progress: 70 },
-  { id: "frontend-camp", progress: 30 },
-  { id: "ai-apps-camp", progress: 100 },
-  { id: "mobile-camp", progress: 55 },
-  { id: "web-competition", progress: 60 },
-  { id: "problem-solving-competition", progress: 100 },
 ];
 
 const ACTIVITY_TYPE_FILTERS = [
@@ -67,19 +55,6 @@ const ACTIVITY_STATUS_FILTERS = [
   { value: "completed", label: "مكتمل" },
 ];
 
-const PENDING_PROGRAM_REQUESTS = [
-  { id: "p1", title: "دورة تصميم واجهات المستخدم المتقدم", type: "دورة", submittedBy: "الأستاذ خالد المطيري", date: "2026-07-01" },
-  { id: "p2", title: "معسكر الأمن السيبراني", type: "معسكر", submittedBy: "كبسولة تحول", date: "2026-07-03" },
-  { id: "p3", title: "تحدي الذكاء الاصطناعي", type: "مسابقة", submittedBy: "شركة النخبة للتقنية", date: "2026-07-05" },
-];
-
-const PENDING_USER_REQUESTS = [
-  { id: "u1", name: "أحمد الشهري", role: "مدرب", date: "2026-07-01" },
-  { id: "u2", name: "شركة رواد المستقبل", role: "شركة", date: "2026-07-02" },
-  { id: "u3", name: "سلمى القحطاني", role: "مدرب", date: "2026-07-04" },
-  { id: "u4", name: "خالد الزهراني", role: "طالب", date: "2026-07-06" },
-];
-
 const USER_REQUEST_ROLE_FILTERS = [
   { value: "all", label: "الكل" },
   { value: "طالب", label: "طالب" },
@@ -87,47 +62,15 @@ const USER_REQUEST_ROLE_FILTERS = [
   { value: "مدرب", label: "مدرب" },
 ];
 
-const COMPLAINTS_SEED = [
-  { id: "c1", name: "عبدالعزيز الحربي", userType: "طالب", text: "لم أتمكن من الوصول لمحتوى الدورة بعد إتمام الدفع.", status: "جديدة" },
-  { id: "c2", name: "شركة الرواد التقنية", userType: "شركة", text: "نواجه تأخيراً في اعتماد حساب الشركة على المنصة.", status: "تم الرد" },
-  { id: "c3", name: "الأستاذة هند العتيبي", userType: "مدرب", text: "أرغب في تحديث بيانات ملفي التعريفي كمدربة.", status: "جديدة" },
-];
-
 const COMPLAINT_STATUS_STYLES = {
   "جديدة": "bg-amber-100 text-amber-700",
   "تم الرد": "bg-emerald-100 text-emerald-700",
 };
 
-// شركة / مدرب dashboards aren't built out yet — left out until they are.
-const ROLE_SWITCHER_OPTIONS = [
-  { value: "student", label: "طالب" },
-  { value: "admin", label: "إدارة" },
-];
-
-// Ascending mock trend — final month matches the admin stats snapshot
-// (18 شركات / 24 مدربين / 120 طلاب) so the two stay visually consistent.
-// Labels are kept in English inside the chart itself — Arabic text doesn't
-// shape cleanly in recharts' SVG text nodes, English reads far more crisply.
-const USER_GROWTH_DATA = [
-  { label: "Jan", Students: 40, Companies: 4, Trainers: 6 },
-  { label: "Feb", Students: 58, Companies: 7, Trainers: 9 },
-  { label: "Mar", Students: 75, Companies: 10, Trainers: 13 },
-  { label: "Apr", Students: 92, Companies: 13, Trainers: 17 },
-  { label: "May", Students: 108, Companies: 16, Trainers: 21 },
-  { label: "Jun", Students: 120, Companies: 18, Trainers: 24 },
-];
-
 const REPORT_TYPE_FILTERS = [
   { value: "all", label: "الكل" },
   { value: "تقرير", label: "تقرير" },
   { value: "طلب", label: "طلب" },
-];
-
-const REPORT_ITEMS = [
-  { id: "r1", tag: "تقرير", title: "تقرير الأداء الشهري", date: "2026-04-30" },
-  { id: "r2", tag: "طلب", title: "اعتماد شركة النخبة للتقنية", date: "2026-05-12" },
-  { id: "r3", tag: "تقرير", title: "تقرير رضا المستخدمين", date: "2026-05-27" },
-  { id: "r4", tag: "طلب", title: "اعتماد مدرب جديد", date: "2026-06-10" },
 ];
 
 // All-green family per request, validated for CVD-safe separation and
@@ -222,7 +165,7 @@ function ActivityRow({ label, countLabel, items }) {
         <select
           value={statusFilter}
           onChange={(event) => setStatusFilter(event.target.value)}
-          className="rounded-full border border-brand-border bg-brand-light px-3 py-1 text-xs font-bold text-brand-muted"
+          className="rounded-full border border-brand-border bg-brand-white px-3 py-1 text-xs font-bold text-brand-muted"
         >
           {ACTIVITY_STATUS_FILTERS.map((filter) => (
             <option key={filter.value} value={filter.value}>
@@ -270,15 +213,13 @@ function CurrentActivitiesSection() {
   }));
 
   return (
-    <div className="rounded-2xl border border-brand-border bg-brand-white p-6">
-      <h3 className="mb-4 text-xl font-bold text-brand-text">الأنشطة الحالية</h3>
-
+    <SharedCard title="الأنشطة الحالية">
       <div className="mb-5 flex flex-col gap-3">
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="ابحث في أنشطتك الحالية..."
-          className="w-full rounded-lg border border-brand-border bg-brand-light px-4 py-2.5 text-sm"
+          className="w-full rounded-lg border border-brand-border bg-brand-white px-4 py-2.5 text-sm"
         />
 
         <div className="flex flex-wrap items-center gap-2">
@@ -291,7 +232,7 @@ function CurrentActivitiesSection() {
               className={`rounded-full px-3 py-1 text-xs font-bold transition ${
                 typeFilter === filter.value
                   ? "bg-brand-main text-white"
-                  : "bg-brand-light text-brand-muted"
+                  : "bg-brand-white text-brand-muted"
               }`}
             >
               {filter.label}
@@ -312,11 +253,11 @@ function CurrentActivitiesSection() {
           ))}
         </div>
       ) : (
-        <p className="rounded-lg border border-dashed border-brand-border bg-brand-light p-4 text-center text-sm text-brand-muted">
+        <p className="rounded-lg border border-dashed border-brand-border bg-brand-white p-4 text-center text-sm text-brand-muted">
           لا توجد أنشطة مطابقة لبحثك.
         </p>
       )}
-    </div>
+    </SharedCard>
   );
 }
 
@@ -328,7 +269,7 @@ function CompletedList() {
   const filteredItems = useMemo(() => {
     const query = search.trim().toLowerCase();
 
-    return completedItems.filter((item) => {
+    return COMPLETED_ITEMS.filter((item) => {
       if (typeFilter !== "all" && item.type !== typeFilter) return false;
       if (query && !item.title.toLowerCase().includes(query)) return false;
       return true;
@@ -336,17 +277,13 @@ function CompletedList() {
   }, [search, typeFilter]);
 
   return (
-    <div className="rounded-2xl border border-brand-border bg-brand-white p-6">
-      <h3 className="mb-4 text-xl font-bold text-brand-text">
-       الشهادات المكتملة
-      </h3>
-
+    <SharedCard title="الشهادات المكتملة">
       <div className="mb-4 flex flex-col gap-3">
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="ابحث عن شهادتك باسم الدورة أو المعسكر أو المسابقة..."
-          className="w-full rounded-lg border border-brand-border bg-brand-light px-4 py-2.5 text-sm"
+          className="w-full rounded-lg border border-brand-border bg-brand-white px-4 py-2.5 text-sm"
         />
 
         <div className="flex flex-wrap items-center gap-2">
@@ -359,7 +296,7 @@ function CompletedList() {
               className={`rounded-full px-3 py-1 text-xs font-bold transition ${
                 typeFilter === filter.value
                   ? "bg-brand-main text-white"
-                  : "bg-brand-light text-brand-muted"
+                  : "bg-brand-white text-brand-muted"
               }`}
             >
               {filter.label}
@@ -373,7 +310,7 @@ function CompletedList() {
           {filteredItems.map((item) => (
             <article
               key={item.title}
-              className="flex items-center justify-between gap-3 rounded-lg border border-brand-border bg-brand-light p-3"
+              className="flex items-center justify-between gap-3 rounded-lg border border-brand-border bg-brand-white p-3"
             >
               <div>
                 <span className="mb-1 inline-block rounded-full bg-brand-main px-2.5 py-0.5 text-[11px] font-bold text-white">
@@ -394,60 +331,35 @@ function CompletedList() {
           ))}
         </div>
       ) : (
-        <p className="rounded-lg border border-dashed border-brand-border bg-brand-light p-4 text-center text-sm text-brand-muted">
+        <p className="rounded-lg border border-dashed border-brand-border bg-brand-white p-4 text-center text-sm text-brand-muted">
           لا توجد نتائج مطابقة لبحثك.
         </p>
       )}
-    </div>
-  );
-}
-
-function ProjectsSection({ projects }) {
-  return (
-    <div className="rounded-2xl border border-brand-border bg-brand-white p-6">
-      <h3 className="mb-4 text-xl font-bold text-brand-text">مشاريعي المرفوعة</h3>
-
-      <div className="flex flex-col gap-3">
-        {projects.map((project) => (
-          <article
-            key={project.title}
-            className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-light p-4"
-          >
-            <div>
-              <h4 className="font-bold text-brand-text">{project.title}</h4>
-              <p className="text-sm text-brand-muted">تاريخ الرفع: {project.date}</p>
-            </div>
-
-            <span className="rounded-full bg-brand-main px-3 py-1 text-xs font-bold text-white">
-              {project.status}
-            </span>
-          </article>
-        ))}
-      </div>
-    </div>
+    </SharedCard>
   );
 }
 
 function UserGrowthChart() {
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-brand-border bg-brand-white p-6">
-      <h4 className="mb-4 text-lg font-bold text-brand-text">توزيع المستخدمين حسب الفئة</h4>
-
-      <div className="flex-1">
+    <SharedCard title="توزيع المستخدمين حسب الفئة" className="flex flex-col self-start">
+      {/* self-start above opts this card out of the grid row's default
+          stretch, and this fixed height keeps it constant — filtering
+          the neighboring ReportsPanel down (or up) never resizes it. */}
+      <div className="h-120">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={USER_GROWTH_DATA}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--c-border)" />
-            <XAxis dataKey="label" fontSize={12} />
-            <YAxis fontSize={12} />
+          <LineChart data={USER_GROWTH_DATA} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--c-brand-border)" />
+            <XAxis dataKey="label" fontSize={13} tick={{ fill: "var(--c-brand-text)" }} stroke="var(--c-brand-border)" />
+            <YAxis fontSize={13} tick={{ fill: "var(--c-brand-text)" }} stroke="var(--c-brand-border)" />
             <Tooltip />
             <Legend wrapperStyle={{ fontWeight: 700 }} />
-            <Line type="monotone" dataKey="Students" stroke={CHART_SERIES_COLORS.Students} strokeWidth={3} dot={{ r: 4 }} />
-            <Line type="monotone" dataKey="Companies" stroke={CHART_SERIES_COLORS.Companies} strokeWidth={3} dot={{ r: 4 }} />
-            <Line type="monotone" dataKey="Trainers" stroke={CHART_SERIES_COLORS.Trainers} strokeWidth={3} dot={{ r: 4 }} />
+            <Line type="monotone" dataKey="Students" stroke={CHART_SERIES_COLORS.Students} strokeWidth={4} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="Companies" stroke={CHART_SERIES_COLORS.Companies} strokeWidth={4} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="Trainers" stroke={CHART_SERIES_COLORS.Trainers} strokeWidth={4} dot={{ r: 4 }} activeDot={{ r: 6 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </SharedCard>
   );
 }
 
@@ -463,15 +375,13 @@ function ReportsPanel() {
   });
 
   return (
-    <div className="rounded-2xl border border-brand-border bg-brand-white p-6">
-      <h4 className="mb-4 text-lg font-bold text-brand-text">التقارير</h4>
-
+    <SharedCard title="التقارير">
       <div className="mb-4 flex flex-col gap-3">
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="ابحث في التقارير..."
-          className="w-full rounded-lg border border-brand-border bg-brand-light px-4 py-2.5 text-sm"
+          className="w-full rounded-lg border border-brand-border bg-brand-white px-4 py-2.5 text-sm"
         />
 
         <div className="flex flex-wrap items-center gap-2">
@@ -484,7 +394,7 @@ function ReportsPanel() {
               className={`rounded-full px-3 py-1 text-xs font-bold transition ${
                 tagFilter === filter.value
                   ? "bg-brand-main text-white"
-                  : "bg-brand-light text-brand-muted"
+                  : "bg-brand-white text-brand-muted"
               }`}
             >
               {filter.label}
@@ -498,7 +408,7 @@ function ReportsPanel() {
           {filteredReports.map((item) => (
             <article
               key={item.id}
-              className="flex items-center justify-between gap-3 rounded-lg border border-brand-border bg-brand-light p-3"
+              className="flex items-center justify-between gap-3 rounded-lg border border-brand-border bg-brand-white p-3"
             >
               <div>
                 <span className="mb-1 inline-block rounded-full bg-brand-main px-2.5 py-0.5 text-[11px] font-bold text-white">
@@ -519,11 +429,11 @@ function ReportsPanel() {
           ))}
         </div>
       ) : (
-        <p className="rounded-lg border border-dashed border-brand-border bg-brand-light p-4 text-center text-sm text-brand-muted">
+        <p className="rounded-lg border border-dashed border-brand-border bg-brand-white p-4 text-center text-sm text-brand-muted">
           لا توجد تقارير مطابقة.
         </p>
       )}
-    </div>
+    </SharedCard>
   );
 }
 
@@ -629,9 +539,7 @@ function AdminApprovalRequestsSection() {
   }
 
   return (
-    <div className="rounded-2xl border border-brand-border bg-brand-white p-6">
-      <h3 className="mb-4 text-xl font-bold text-brand-text">طلبات الموافقة</h3>
-
+    <SharedCard title="طلبات الموافقة">
       <div className="mb-6">
         <h4 className="mb-3 text-base font-bold text-brand-text">طلبات البرامج</h4>
 
@@ -648,7 +556,7 @@ function AdminApprovalRequestsSection() {
             )}
           />
         ) : (
-          <p className="rounded-lg border border-dashed border-brand-border bg-brand-light p-4 text-center text-sm text-brand-muted">
+          <p className="rounded-lg border border-dashed border-brand-border bg-brand-white p-4 text-center text-sm text-brand-muted">
             لا توجد طلبات برامج معلّقة.
           </p>
         )}
@@ -668,7 +576,7 @@ function AdminApprovalRequestsSection() {
                 className={`rounded-full px-3 py-1 text-xs font-bold transition ${
                   roleFilter === filter.value
                     ? "bg-brand-main text-white"
-                    : "bg-brand-light text-brand-muted"
+                    : "bg-brand-white text-brand-muted"
                 }`}
               >
                 {filter.label}
@@ -690,12 +598,12 @@ function AdminApprovalRequestsSection() {
             )}
           />
         ) : (
-          <p className="rounded-lg border border-dashed border-brand-border bg-brand-light p-4 text-center text-sm text-brand-muted">
+          <p className="rounded-lg border border-dashed border-brand-border bg-brand-white p-4 text-center text-sm text-brand-muted">
             لا توجد طلبات مستخدمين معلّقة.
           </p>
         )}
       </div>
-    </div>
+    </SharedCard>
   );
 }
 
@@ -722,12 +630,10 @@ function ComplaintsSection() {
   }
 
   return (
-    <div className="rounded-2xl border border-brand-border bg-brand-white p-6">
-      <h3 className="mb-4 text-xl font-bold text-brand-text">الشكاوى والرد عليها</h3>
-
+    <SharedCard title="الشكاوى والرد عليها">
       <div className="flex flex-col gap-3">
         {complaints.map((item) => (
-          <article key={item.id} className="rounded-xl border border-brand-border bg-brand-light p-4">
+          <article key={item.id} className="rounded-xl border border-brand-border bg-brand-white p-4">
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-brand-text">{item.name}</span>
@@ -783,82 +689,58 @@ function ComplaintsSection() {
           </article>
         ))}
       </div>
-    </div>
-  );
-}
-
-function RoleSwitcher() {
-  const { role, setRole } = useRole();
-
-  return (
-    <div className="flex items-center justify-end gap-2 rounded-2xl border border-brand-border bg-brand-white p-4">
-      <span className="text-sm font-bold text-brand-muted">تبديل الواجهة:</span>
-      <select
-        value={role}
-        onChange={(event) => setRole(event.target.value)}
-        className="rounded-full border border-brand-border bg-brand-light px-4 py-2 text-sm font-bold text-brand-text"
-      >
-        {ROLE_SWITCHER_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    </SharedCard>
   );
 }
 
 function Dashboard() {
+  const { role } = useRole();
 
-  const { role, section } = useRole();
+  if (role === "guest") return <Navigate to="/login" replace />;
 
   const dashboard = DASHBOARD_DATA[role];
 
-  const showProjects = role === "student" && section === "projects";
-
   return (
-    <section className="flex flex-col gap-5">
-      <div className="rounded-2xl border border-brand-border bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] p-8 text-white">
-        <h2 className="mb-2 text-4xl font-bold text-white">{dashboard.title}</h2>
-        <p className="text-lg text-white/85">{dashboard.subtitle}</p>
-      </div>
+    <div className="flex flex-col gap-5 md:flex-row md:items-start">
+      <Sidebar />
 
-      {role === "admin" ? (
-        <AdminReportsSection stats={dashboard.stats} />
-      ) : (
-        <>
-          {role !== "student" ? (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {dashboard.stats.map((stat) => (
-                <article
-                  key={stat.label}
-                  className="rounded-xl border border-brand-border bg-brand-white px-4 py-3 shadow-sm"
-                >
-                  <span className="mb-1 block text-sm text-brand-muted">{stat.label}</span>
-                  <strong className="text-2xl text-brand-text">{stat.value}</strong>
-                </article>
-              ))}
-            </div>
-          ) : null}
+      <section className="flex min-w-0 flex-1 flex-col gap-5">
+        <div className="rounded-2xl border border-brand-border bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] p-8 text-white">
+          <h2 className="mb-2 text-4xl font-bold text-white">{dashboard.title}</h2>
+          <p className="text-lg text-white/85">{dashboard.subtitle}</p>
+        </div>
 
-          {showProjects ? (
-            <ProjectsSection projects={dashboard.projects} />
-          ) : dashboard.chart ? (
-            <ChartCard chart={dashboard.chart} />
-          ) : null}
-        </>
-      )}
+        {role === "admin" ? (
+          <AdminReportsSection stats={dashboard.stats} />
+        ) : (
+          <>
+            {role !== "student" ? (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {dashboard.stats.map((stat) => (
+                  <article
+                    key={stat.label}
+                    className="rounded-xl border border-brand-border bg-brand-white px-4 py-3 shadow-sm"
+                  >
+                    <span className="mb-1 block text-sm text-brand-muted">{stat.label}</span>
+                    <strong className="text-2xl text-brand-text">{stat.value}</strong>
+                  </article>
+                ))}
+              </div>
+            ) : null}
 
-      {role === "admin" ? <AdminApprovalRequestsSection /> : null}
+            {dashboard.chart ? <ChartCard chart={dashboard.chart} /> : null}
+          </>
+        )}
 
-      {role === "admin" ? <ComplaintsSection /> : null}
+        {role === "admin" ? <AdminApprovalRequestsSection /> : null}
 
-      {role === "student" ? <CompletedList /> : null}
+        {role === "admin" ? <ComplaintsSection /> : null}
 
-      {role === "student" ? <CurrentActivitiesSection /> : null}
+        {role === "student" ? <CompletedList /> : null}
 
-      <RoleSwitcher />
-    </section>
+        {role === "student" ? <CurrentActivitiesSection /> : null}
+      </section>
+    </div>
   );
 }
 

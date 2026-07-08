@@ -70,13 +70,6 @@ export const ABOUT_DATA = {
     },
   ],
 
-  stats: [
-    { label: "المشاركين بالمنصة", value: "120" },
-    { label: "الدورات المتاحة", value: "20" },
-    { label: "المعسكرات المكتملة", value: "12" },
-    { label: "الشهادات الصادرة", value: "980" },
-  ],
-
   team: {
     title: "فريق العمل والشركاء",
     subtitle: "فريق التطوير:",
@@ -111,10 +104,5 @@ export const ABOUT_DATA = {
     ],
   },
 
-  cta: {
-    title: "هل لديك استفسار؟",
-    subtitle: "فريق الدعم جاهز لمساعدتك في أي وقت.",
-    primaryLabel: "تواصل معنا",
-    secondaryLabel: "استعرض الأسئلة الشائعة",
-  },
+  
 };

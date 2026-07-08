@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"; // ✅ added useParams
-
-/*import { useRole } from "../context/RoleContext";*/
+import { useRole } from "../context/RoleContext";
 import StarRating from "../components/StarRating";
+import SharedCard from "../components/SharedCard";
 import {
   PRODUCTS,
   PRODUCT_TYPE_LABELS,
@@ -10,15 +10,13 @@ import {
 } from "../data/productData";
 
 /* ---------- small shared helpers ---------- */
-
 function StatusBadge({ status }) {
   const styles = {
     open: "bg-emerald-100 text-emerald-700",
     soon: "bg-amber-100 text-amber-700",
     full: "bg-rose-100 text-rose-700",
-    closed: "bg-brand-light text-brand-muted",
+    closed: "bg-brand-white text-brand-muted",
   };
-
   return (
     <span className={`rounded-full px-3 py-1 text-xs font-bold ${styles[status] ?? styles.closed}`}>
       {STATUS_LABELS[status] ?? status}
@@ -26,48 +24,34 @@ function StatusBadge({ status }) {
   );
 }
 
-function SectionCard({ title, children }) {
-  return (
-    <div className="rounded-2xl border border-brand-border bg-brand-white p-6">
-      {title ? (
-        <h3 className="mb-4 text-xl font-bold text-brand-text">{title}</h3>
-      ) : null}
-      {children}
-    </div>
-  );
-}
-
 /* ---------- section components (data-driven, like About.jsx) ---------- */
-
 function OverviewSection({ product }) {
   return (
-    <SectionCard title="نبذة عن البرنامج">
+    <SharedCard title="نبذة عن البرنامج">
       <p className="text-sm leading-7 text-brand-muted">{product.description}</p>
-
       {product.tags?.length ? (
         <div className="mt-4 flex flex-wrap gap-2">
           {product.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-brand-light px-3 py-1 text-xs font-bold text-brand-text"
+              className="rounded-full bg-brand-white px-3 py-1 text-xs font-bold text-brand-text"
             >
               {tag}
             </span>
           ))}
         </div>
       ) : null}
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function OutcomesSection({ product }) {
   const { outcomes } = product;
   if (!outcomes) return null;
-
   return (
-    <SectionCard title="ماذا ستحقق؟">
+    <SharedCard title="ماذا ستحقق؟">
       {outcomes.certificate ? (
-        <div className="mb-4 flex items-center gap-3 rounded-xl border border-brand-border bg-brand-light p-4">
+        <div className="mb-4 flex items-center gap-3 rounded-xl border border-brand-border bg-brand-white p-4">
           <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-main text-white">
             ✓
           </span>
@@ -77,32 +61,30 @@ function OutcomesSection({ product }) {
           </div>
         </div>
       ) : null}
-
       <div className="grid gap-3 sm:grid-cols-2">
         {outcomes.skills.map((skill) => (
           <div
             key={skill}
-            className="flex items-start gap-2 rounded-xl border border-brand-border bg-brand-light p-3"
+            className="flex items-start gap-2 rounded-xl border border-brand-border bg-brand-white p-3"
           >
             <span className="mt-0.5 text-brand-main">◆</span>
             <p className="text-sm text-brand-muted">{skill}</p>
           </div>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function ModulesSection({ product, title, items }) {
   if (!items?.length) return null;
-
   return (
-    <SectionCard title={title}>
+    <SharedCard title={title}>
       <div className="flex flex-col gap-3">
         {items.map((item, index) => (
           <article
             key={item.title}
-            className="flex items-center justify-between gap-4 rounded-xl border border-brand-border bg-brand-light p-4"
+            className="flex items-center justify-between gap-4 rounded-xl border border-brand-border bg-brand-white p-4"
           >
             <div className="flex items-center gap-3">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-main text-sm font-bold text-white">
@@ -114,36 +96,34 @@ function ModulesSection({ product, title, items }) {
           </article>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function IncludesSection({ product }) {
   if (!product.includes?.length) return null;
-
   return (
-    <SectionCard title="ماذا يشمل المعسكر؟">
+    <SharedCard title="ماذا يشمل المعسكر؟">
       <div className="grid gap-3 sm:grid-cols-2">
         {product.includes.map((item) => (
           <div
             key={item}
-            className="flex items-center gap-2 rounded-xl border border-brand-border bg-brand-light p-3"
+            className="flex items-center gap-2 rounded-xl border border-brand-border bg-brand-white p-3"
           >
             <span className="text-brand-main">✓</span>
             <p className="text-sm text-brand-muted">{item}</p>
           </div>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function InstructorSection({ product }) {
   const { instructor } = product;
   if (!instructor) return null;
-
   return (
-    <SectionCard title="المدرب">
+    <SharedCard title="المدرب">
       <div className="flex items-center gap-4">
         <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-main text-xl font-bold text-white">
           {instructor.name.trim().charAt(0)}
@@ -153,55 +133,52 @@ function InstructorSection({ product }) {
           <p className="text-sm text-brand-muted">{instructor.role}</p>
         </div>
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function PrizesSection({ product }) {
   if (!product.prizes?.length) return null;
-
   return (
-    <SectionCard title="الجوائز">
+    <SharedCard title="الجوائز">
       <div className="grid gap-3 sm:grid-cols-3">
         {product.prizes.map((prize) => (
           <article
             key={prize.place}
-            className="rounded-xl border border-brand-border bg-brand-light p-4 text-center"
+            className="rounded-xl border border-brand-border bg-brand-white p-4 text-center"
           >
             <p className="mb-1 text-sm font-bold text-brand-main">{prize.place}</p>
             <p className="text-sm text-brand-text">{prize.reward}</p>
           </article>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function TimelineSection({ product }) {
   if (!product.timeline?.length) return null;
-
   return (
-    <SectionCard title="الجدول الزمني">
+    <SharedCard title="الجدول الزمني">
       <div className="flex flex-col gap-3">
         {product.timeline.map((step) => (
           <div
             key={step.phase}
-            className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-light p-4"
+            className="flex items-center justify-between rounded-xl border border-brand-border bg-brand-white p-4"
           >
             <span className="text-sm font-bold text-brand-text">{step.phase}</span>
             <span className="text-sm text-brand-muted">{step.date}</span>
           </div>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function RulesSection({ product }) {
   if (!product.rules?.length) return null;
-
   return (
-    <SectionCard title="الشروط والأحكام">
+    <SharedCard title="الشروط والأحكام">
       <ul className="flex flex-col gap-2">
         {product.rules.map((rule) => (
           <li key={rule} className="flex items-start gap-2 text-sm text-brand-muted">
@@ -210,100 +187,95 @@ function RulesSection({ product }) {
           </li>
         ))}
       </ul>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function BioSection({ product }) {
   if (!product.bio) return null;
   return (
-    <SectionCard title="نبذة عن المدرب">
+    <SharedCard title="نبذة عن المدرب">
       <p className="text-sm leading-7 text-brand-muted">{product.bio}</p>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function SkillsSection({ product }) {
   if (!product.skills?.length) return null;
-
   return (
-    <SectionCard title="المهارات والتخصصات">
+    <SharedCard title="المهارات والتخصصات">
       <div className="flex flex-wrap gap-2">
         {product.skills.map((skill) => (
           <span
             key={skill}
-            className="rounded-full bg-brand-light px-4 py-2 text-sm font-bold text-brand-text"
+            className="rounded-full bg-brand-white px-4 py-2 text-sm font-bold text-brand-text"
           >
             {skill}
           </span>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function CoursesTaughtSection({ product }) {
   if (!product.coursesTaught?.length) return null;
-
   return (
-    <SectionCard title="الدورات التي يقدّمها">
+    <SharedCard title="الدورات التي يقدّمها">
       <div className="flex flex-col gap-3">
         {product.coursesTaught.map((course) => (
           <div
             key={course}
-            className="rounded-xl border border-brand-border bg-brand-light p-4 text-sm font-bold text-brand-text"
+            className="rounded-xl border border-brand-border bg-brand-white p-4 text-sm font-bold text-brand-text"
           >
             {course}
           </div>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function ProjectBriefSection({ product }) {
   if (!product.projectBrief) return null;
   return (
-    <SectionCard title="وصف المشروع">
+    <SharedCard title="وصف المشروع">
       <p className="text-sm leading-7 text-brand-muted">{product.projectBrief}</p>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function RequiredRolesSection({ product }) {
   if (!product.requiredRoles?.length) return null;
-
   return (
-    <SectionCard title="الأدوار المطلوبة في الفريق">
+    <SharedCard title="الأدوار المطلوبة في الفريق">
       <div className="grid gap-3 sm:grid-cols-2">
         {product.requiredRoles.map((roleName) => (
           <div
             key={roleName}
-            className="flex items-center gap-2 rounded-xl border border-brand-border bg-brand-light p-3"
+            className="flex items-center gap-2 rounded-xl border border-brand-border bg-brand-white p-3"
           >
             <span className="text-brand-main">◆</span>
             <p className="text-sm font-bold text-brand-text">{roleName}</p>
           </div>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 function ReviewsSection({ product }) {
   if (!product.reviews?.length) return null;
-
   return (
-    <SectionCard title="التقييمات والآراء">
+    <SharedCard title="التقييمات والآراء">
       <div className="mb-4 flex items-center gap-3">
         <StarRating value={product.rating.average} count={product.rating.count} size="lg" />
       </div>
-
       <div className="flex flex-col gap-3">
         {product.reviews.map((review) => (
           <article
             key={`${review.name}-${review.date}`}
-            className="rounded-xl border border-brand-border bg-brand-light p-4"
+            className="rounded-xl border border-brand-border bg-brand-white p-4"
           >
             <div className="mb-2 flex items-center justify-between">
               <p className="text-sm font-bold text-brand-text">{review.name}</p>
@@ -314,7 +286,7 @@ function ReviewsSection({ product }) {
           </article>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
@@ -323,18 +295,16 @@ function RelatedSection({ product }) {
   const related = (product.related ?? [])
     .map((id) => PRODUCTS[id])
     .filter(Boolean);
-
   if (!related.length) return null;
-
   return (
-    <SectionCard title="برامج ذات صلة">
+    <SharedCard title="برامج ذات صلة">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => navigate(`/program/${item.id}`)}
-            className="rounded-xl border border-brand-border bg-brand-light p-4 text-right transition hover:bg-brand-white"
+            className="rounded-xl border border-brand-border bg-brand-white p-4 text-right transition hover:bg-brand-white"
           >
             <span className="mb-2 inline-block rounded-full bg-brand-main px-3 py-1 text-xs font-bold text-white">
               {PRODUCT_TYPE_LABELS[item.type]}
@@ -343,12 +313,11 @@ function RelatedSection({ product }) {
           </button>
         ))}
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
 /* ---------- section registry: page renders whatever the product lists ---------- */
-
 function renderSection(key, product) {
   switch (key) {
     case "overview":
@@ -389,7 +358,6 @@ function renderSection(key, product) {
 }
 
 /* ---------- role-aware action logic (the 3 dimensions: type × role × state) ---------- */
-
 function getActionConfig({ product, role, isEnrolled }) {
   if (product.type === "trainer") {
     if (role === "company") return { label: "طلب هذا المدرب", enabled: true };
@@ -397,15 +365,13 @@ function getActionConfig({ product, role, isEnrolled }) {
     if (role === "guest") return { label: "سجّل الدخول للتواصل", enabled: true, needsAuth: true };
     return { label: "طلب المدربين متاح للشركات", enabled: false };
   }
-
   if (product.type === "project") {
     if (role === "company") return { label: "طلب فريق لهذا المشروع", enabled: true };
-    if (role === "couch") return { label: "انضمّ كخبير للفريق", enabled: true };
+    if (role === "trainer") return { label: "انضمّ كخبير للفريق", enabled: true };
     if (role === "admin") return { label: "إدارة المشروع", enabled: true, dark: true };
     if (role === "guest") return { label: "سجّل الدخول", enabled: true, needsAuth: true };
     return { label: "الطلب متاح للشركات", enabled: false };
   }
-
   // course / camp / competition
   if (product.status === "full") return { label: "القائمة ممتلئة", enabled: false };
   if (product.status === "closed") return { label: "التسجيل مغلق", enabled: false };
@@ -413,7 +379,7 @@ function getActionConfig({ product, role, isEnrolled }) {
   if (role === "guest") return { label: "سجّل الدخول للتسجيل", enabled: true, needsAuth: true };
   if (isEnrolled) return { label: "أنت مسجّل ✔", enabled: false };
   if (product.hasCapabilityForm) return { label: "التقديم لنموذج القبول", enabled: true, opensForm: true };
-  if (product.type === "competition") return { label: "سجّل في المسابقة", enabled: true };
+  if (product.type === "competition") return { label: "سجّل الآن", enabled: true };
   return { label: "سجّل الآن", enabled: true };
 }
 
@@ -427,6 +393,7 @@ function ActionCard({
   onEnroll,
   onOpenForm,
   onToggleWishlist,
+  onNavigateToPayment,
 }) {
   const action = getActionConfig({ product, role: viewerRole, isEnrolled });
 
@@ -437,8 +404,15 @@ function ActionCard({
   function handleClick() {
     if (!action.enabled) return;
     if (action.opensForm) return onOpenForm();
+
+    if (!product.pricing.isFree) {
+      return onNavigateToPayment();
+    }
+
     return onEnroll();
   }
+
+  // ... باقي كود الـ JSX داخل المكون يظل كما هو دون تغيير
 
   const showSeats = ["course", "camp", "competition"].includes(product.type);
   const showWishlist =
@@ -450,7 +424,6 @@ function ActionCard({
         <span className="text-2xl font-bold text-brand-text">{priceLabel}</span>
         <StatusBadge status={product.status} />
       </div>
-
       <div className="mb-4 flex flex-col gap-2">
         {product.facts.map((fact) => (
           <div key={fact.label} className="flex items-center justify-between text-sm">
@@ -459,20 +432,18 @@ function ActionCard({
           </div>
         ))}
       </div>
-
       {showSeats && product.seats.total > 0 ? (
-        <div className="mb-4 rounded-xl bg-brand-light p-3 text-center text-sm font-bold text-brand-text">
+        <div className="mb-4 rounded-xl bg-brand-white p-3 text-center text-sm font-bold text-brand-text">
           المقاعد المتبقية: {product.seats.remaining} من {product.seats.total}
         </div>
       ) : null}
-
       <button
         type="button"
         onClick={handleClick}
         disabled={!action.enabled}
         className={`w-full rounded-lg px-4 py-3 text-sm font-bold transition ${
           !action.enabled
-            ? "cursor-not-allowed bg-brand-light text-brand-muted"
+            ? "cursor-not-allowed bg-brand-white text-brand-muted"
             : action.dark
             ? "bg-brand-dark text-white hover:opacity-90"
             : "bg-brand-main text-white hover:opacity-90"
@@ -480,15 +451,14 @@ function ActionCard({
       >
         {action.label}
       </button>
-
       {showWishlist ? (
         <button
           type="button"
           onClick={onToggleWishlist}
           className={`mt-3 w-full rounded-lg border px-4 py-3 text-sm font-bold transition ${
             isWishlisted
-              ? "border-brand-main bg-brand-light text-brand-main"
-              : "border-brand-border text-brand-text hover:bg-brand-light"
+              ? "border-brand-main bg-brand-white text-brand-main"
+              : "border-brand-border text-brand-text hover:bg-brand-white"
           }`}
         >
           {isWishlisted ? "♥ في قائمة الرغبات" : "♡ أضف لقائمة الرغبات"}
@@ -499,7 +469,6 @@ function ActionCard({
 }
 
 /* ---------- capability form (state + conditional render) ---------- */
-
 function CapabilityForm({ product, onClose }) {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -510,7 +479,7 @@ function CapabilityForm({ product, onClose }) {
 
   if (submitted) {
     return (
-      <SectionCard title="تم إرسال طلبك">
+      <SharedCard title="تم إرسال طلبك">
         <p className="text-sm text-brand-muted">
           شكراً لك، تم استلام نموذج القبول وسيتم مراجعته والرد عليك قريباً.
         </p>
@@ -521,14 +490,13 @@ function CapabilityForm({ product, onClose }) {
         >
           إغلاق
         </button>
-      </SectionCard>
+      </SharedCard>
     );
   }
 
   return (
-    <SectionCard title="نموذج القبول">
+    <SharedCard title="نموذج القبول">
       <p className="mb-4 text-sm text-brand-muted">{product.capabilityForm.note}</p>
-
       <div className="flex flex-col gap-4">
         {product.capabilityForm.questions.map((question, index) => (
           <div key={question} className="flex flex-col gap-2">
@@ -537,13 +505,12 @@ function CapabilityForm({ product, onClose }) {
               rows={2}
               value={answers[index] ?? ""}
               onChange={(event) => updateAnswer(index, event.target.value)}
-              className="rounded-lg border border-brand-border bg-brand-light px-3 py-2 text-sm"
+              className="rounded-lg border border-brand-border bg-brand-white px-3 py-2 text-sm"
               placeholder="اكتب إجابتك هنا..."
             />
           </div>
         ))}
       </div>
-
       <div className="mt-4 flex gap-3">
         <button
           type="button"
@@ -555,36 +522,23 @@ function CapabilityForm({ product, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg border border-brand-border px-4 py-2 text-sm font-bold text-brand-text hover:bg-brand-light"
+          className="rounded-lg border border-brand-border px-4 py-2 text-sm font-bold text-brand-text hover:bg-brand-white"
         >
           إلغاء
         </button>
       </div>
-    </SectionCard>
+    </SharedCard>
   );
 }
 
-/* ---------- demo bar: lets the team test product × role without full wiring ---------- */
-
+/* ---------- demo bar: quick-jump between sample products of each type ---------- */
 const DEMO_PRODUCT_TYPES = ["course", "camp", "competition", "trainer"];
-
-function DemoBar({ product, viewerRole, onChangeRole }) {
+function DemoBar({ product }) {
   const navigate = useNavigate();
-
-  const roles = ["guest", "student", "couch", "company", "admin"];
-  const roleLabels = {
-    guest: "زائر",
-    student: "طالب",
-    couch: "مدرب",
-    company: "شركة",
-    admin: "إدارة",
-  };
-
   function goToType(type) {
     const item = Object.values(PRODUCTS).find((entry) => entry.type === type);
     if (item) navigate(`/program/${item.id}`);
   }
-
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-dashed border-brand-border bg-brand-white p-4 md:flex-row md:items-center md:justify-between">
       <div className="flex flex-wrap items-center gap-2">
@@ -595,26 +549,10 @@ function DemoBar({ product, viewerRole, onChangeRole }) {
             type="button"
             onClick={() => goToType(type)}
             className={`rounded-full px-3 py-1 text-xs font-bold transition ${
-              type === product.type ? "bg-brand-main text-white" : "bg-brand-light text-brand-muted"
+              type === product.type ? "bg-brand-main text-white" : "bg-brand-white text-brand-muted"
             }`}
           >
             {PRODUCT_TYPE_LABELS[type]}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs font-bold text-brand-muted">الدور:</span>
-        {roles.map((r) => (
-          <button
-            key={r}
-            type="button"
-            onClick={() => onChangeRole(r)}
-            className={`rounded-full px-3 py-1 text-xs font-bold transition ${
-              r === viewerRole ? "bg-brand-dark text-white" : "bg-brand-light text-brand-muted"
-            }`}
-          >
-            {roleLabels[r]}
           </button>
         ))}
       </div>
@@ -623,15 +561,11 @@ function DemoBar({ product, viewerRole, onChangeRole }) {
 }
 
 /* ---------- the page ---------- */
-
 export default function ProgramDetails() {
   const { id } = useParams(); // ✅ now imported correctly
+  const navigate = useNavigate();
   const product = PRODUCTS[id]; // ✅ no more silent fallback to "react-course"
-
-  // Local "who is viewing" state — completely separate from the dashboard role.
-  // Swap this for real auth later; it never touches RoleContext.
-  const [viewerRole, setViewerRole] = useState("guest");
-
+  const { role: viewerRole } = useRole();
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
@@ -657,9 +591,7 @@ export default function ProgramDetails() {
 
   return (
     <section className="mx-auto flex max-w-6xl flex-col gap-5">
-      {/* Remove <DemoBar /> once real routing + auth are wired */}
-      <DemoBar product={product} viewerRole={viewerRole} onChangeRole={setViewerRole} />
-
+      <DemoBar product={product} />
       {/* hero */}
       <div className="rounded-2xl border border-brand-border bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] p-8 text-white">
         <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -668,10 +600,8 @@ export default function ProgramDetails() {
           </span>
           <span className="text-sm text-white/85">{product.provider}</span>
         </div>
-
         <h2 className="mb-2 text-3xl font-bold text-white md:text-4xl">{product.title}</h2>
         <p className="mb-4 text-lg text-white/85">{product.tagline}</p>
-
         <div className="flex items-center gap-3 rounded-full bg-white/15 px-3 py-1 w-fit">
           <StarRating value={product.rating.average} count={product.rating.count} />
         </div>
@@ -683,13 +613,11 @@ export default function ProgramDetails() {
           {formOpen ? (
             <CapabilityForm product={product} onClose={() => setFormOpen(false)} />
           ) : null}
-
           {product.sections.map((key) => (
             <div key={key}>{renderSection(key, product)}</div>
           ))}
         </div>
-
-        <div className="lg:col-span-1">
+<div className="lg:col-span-1">
           <ActionCard
             product={product}
             viewerRole={viewerRole}
@@ -698,6 +626,7 @@ export default function ProgramDetails() {
             onEnroll={() => setIsEnrolled(true)}
             onOpenForm={() => setFormOpen(true)}
             onToggleWishlist={() => setIsWishlisted((current) => !current)}
+            onNavigateToPayment={() => navigate(`/payment/${product.id}`)}
           />
         </div>
       </div>
