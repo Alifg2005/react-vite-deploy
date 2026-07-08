@@ -6,7 +6,7 @@ function OverviewSection({ overview }) {
   return (
     // Single unified card wrapping title + image + text, matching the
     // Vision/Mission card shell below (white bg, rounded-2xl, border, shadow, p-6).
-    <div className="rounded-2xl border border-brand-border bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-brand-border bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
       <h3 className="mb-4 text-xl font-bold text-brand-text">{overview.title}</h3>
 
       {/* Fixed layout: title stays on top, image + text directly beneath it. */}
@@ -41,7 +41,7 @@ function MissionVisionSection({ items }) {
       {items.map((item) => (
         <article
           key={item.title}
-          className="flex h-full flex-col rounded-2xl border border-brand-border bg-white p-6 shadow-sm"
+          className="flex h-full flex-col rounded-2xl border border-brand-border bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800"
         >
           <span className="mb-3 inline-block w-fit rounded-full bg-brand-main px-3 py-1 text-xs font-bold text-white">
             {item.title}
