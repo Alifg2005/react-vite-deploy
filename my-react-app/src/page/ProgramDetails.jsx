@@ -473,6 +473,8 @@ function CapabilityForm({ product, onClose }) {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
+    if (!product.capabilityForm) return null; // safety net
+
   function updateAnswer(index, value) {
     setAnswers((current) => ({ ...current, [index]: value }));
   }
@@ -590,7 +592,7 @@ export default function ProgramDetails() {
   }
 
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-5">
+    <section key={product.id} className="mx-auto flex max-w-6xl flex-col gap-5">
       <DemoBar product={product} />
       {/* hero */}
       <div className="rounded-2xl border border-brand-border bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] p-8 text-white">

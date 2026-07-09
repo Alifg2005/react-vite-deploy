@@ -9,7 +9,7 @@ import heroPhoto from "../images/log.jpg";
 function ProgramsSection({ programs }) {
   return (
     <SharedCard title={programs.title} subtitle={programs.subtitle}>
-      <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {programs.items.map((program) => (
           <article
             key={program.title}
@@ -97,7 +97,7 @@ function HomePage() {
         <GradientBanner title={hero.title} subtitle={hero.subtitle} image={heroPhoto}>
           <button
             type="button"
-            className="rounded-full bg-white px-6 py-3 text-sm font-bold text-brand-dark transition hover:opacity-90"
+            className="rounded-full bg-brand-sky px-6 py-3 text-sm font-bold text-brand-earth transition hover:opacity-90"
             onClick={() => navigate("/course-catalogue")}
           >
             {hero.primaryLabel}

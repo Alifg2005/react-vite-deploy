@@ -1,3 +1,7 @@
+import reactImage from "../images/react.jpg";
+import htmlCssJsImage from "../images/html-css-js.jpg";
+import htmlCssImage from "../images/html css.jpg";
+
 export const PRODUCT_TYPE_LABELS = {
   course: "دورة",
   camp: "معسكر",
@@ -21,7 +25,7 @@ export const PRODUCTS = {
     type: "course",
     title: "تطوير واجهات المستخدم باستخدام React",
     provider: "شركة النخبة للتقنية",
-    image: null,
+    image: reactImage,
     tagline: "من الصفر إلى بناء تطبيقات تفاعلية احترافية بمكتبة React.",
     description:
       "دورة عملية مكثفة تأخذك من أساسيات React إلى بناء تطبيقات حقيقية. تركّز على المكوّنات، الحالة، الـ Hooks، والتعامل مع البيانات، مع مشاريع تطبيقية في كل وحدة.",
@@ -77,7 +81,7 @@ export const PRODUCTS = {
     type: "camp",
     title: "معسكر بناء المواقع المكثّف",
     provider: "كبسولة تحول",
-    image: null,
+    image: htmlCssJsImage,
     tagline: "أسبوعان من التدريب المكثّف لبناء موقع كامل من البداية للنهاية.",
     description:
       "معسكر تدريبي مكثّف يجمع بين التعلّم التطبيقي والإرشاد المباشر. تعمل ضمن فريق على مشروع واقعي بإشراف مدربين محترفين.",
@@ -118,10 +122,11 @@ export const PRODUCTS = {
     type: "competition",
     title: "تحدي بناء أفضل واجهة ويب",
     provider: "شركة النخبة للتقنية",
-    image: null,
+    image: htmlCssImage,
     tagline: "نافس أفضل المطوّرين وابنِ واجهة استثنائية خلال 48 ساعة.",
     description:
       "مسابقة تقنية يتنافس فيها المشاركون على بناء أفضل واجهة ويب وفق معايير محددة. فرصة لإثبات مهاراتك والفوز بجوائز قيّمة.",
+    instructor: { name: "الأستاذ تركي العصيمي", role: "مشرف المسابقة" },
     pricing: { isFree: true, price: 0, currency: "ريال" },
     status: "open",
     deadline: "2026-07-30",
@@ -155,7 +160,7 @@ export const PRODUCTS = {
       { name: "علي الغانم", rating: 5, date: "2026-04-18", comment: "تنظيم رائع ومنافسة قوية. تجربة لا تُنسى." },
     ],
     related: ["react-course", "frontend-camp"],
-    sections: ["overview", "prizes", "timeline", "rules", "reviews", "related"],
+    sections: ["overview", "instructor", "prizes", "timeline", "rules", "reviews", "related"],
   },
 
   "ui-design-course": {
@@ -366,6 +371,7 @@ export const PRODUCTS = {
     image: null,
     tagline: "نافس في حل تحديات برمجية ضمن وقت محدد.",
     description: "مسابقة برمجية يتنافس فيها المشاركون على حل مجموعة من المسائل الخوارزمية خلال مهلة زمنية محددة.",
+    instructor: { name: "الأستاذة هند الزهراني", role: "مشرفة المسابقة" },
     pricing: { isFree: true, price: 0, currency: "ريال" },
     status: "open",
     deadline: "2026-08-18",
