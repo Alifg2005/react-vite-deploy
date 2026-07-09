@@ -73,7 +73,7 @@ export default function CourseCatalogue() {
   }, [allowedTypes, typeFilter, statusFilter, search]);
 
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-5">
+    <section className="flex flex-col gap-5">
       {/* hero */}
       <div className="rounded-2xl border border-brand-border bg-[linear-gradient(90deg,var(--c-hero-start),var(--c-hero-middle),var(--c-hero-end))] p-8 text-white">
         <h2 className="mb-2 text-3xl font-bold text-white md:text-4xl">استكشف البرامج</h2>
@@ -98,7 +98,7 @@ export default function CourseCatalogue() {
 
       {/* grid */}
       {visibleProducts.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {visibleProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
