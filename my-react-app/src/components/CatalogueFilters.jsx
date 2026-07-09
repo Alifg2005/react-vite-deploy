@@ -57,8 +57,8 @@ export default function CatalogueFilters({
               onClick={() => onStatusChange(filter.value)}
               className={`rounded-full px-3 py-1 text-xs font-bold transition ${
                 statusFilter === filter.value
-                  ? "bg-brand-dark text-white"
-                  : "bg-brand-white text-brand-muted"
+                  ? "bg-brand-main text-white"
+                  : "bg-brand-light text-brand-muted"
               }`}
             >
               {filter.label}
