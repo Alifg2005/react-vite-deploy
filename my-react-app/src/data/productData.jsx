@@ -1,6 +1,6 @@
 import reactImage from "../images/react.jpg";
 import htmlCssJsImage from "../images/html-css-js.jpg";
-import htmlCssImage from "../images/html-css.jpg";
+import htmlCssImage from "../images/html css.jpg";
 
 export const PRODUCT_TYPE_LABELS = {
   course: "دورة",

@@ -22,8 +22,13 @@ const ROLE_SWITCHER_OPTIONS = Object.entries(ROLE_LABELS).map(([value, label]) =
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2">
-      <img src={logo} alt="كبسولة تحول" className="h-15 w-auto" />
-      <span className="text-lg font-bold text-brand-text">كبسولة تحول</span>
+      <img
+      src={logo}
+        alt="كبسولة تحول"
+        className="h-15 w-auto"></img>
+      <span className="text-lg font-bold text-brand-text">
+        كبسولة تحول
+      </span>
     </Link>
   );
 }
@@ -110,34 +115,22 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
+  // Close the mobile menu automatically whenever the route changes.
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location.pathname]);
 
   return (
-    /*
-     * CHANGE 1 — sticky + top-0 + z-50:
-     *   "sticky top-0" keeps the header at the top of the viewport while
-     *   scrolling without removing it from document flow (avoids content jump).
-     *   "z-50" ensures it sits above all other page content.
-     *
-     * CHANGE 2 — removed rounded-2xl, added w-full:
-     *   The original rounded corners and the default inline width were causing
-     *   a gap/offset at the top. Removing the border-radius on the outer
-     *   element and making it full-width closes any gap against the viewport edge.
-     *
-     * CHANGE 3 — removed border (top/sides) to avoid sub-pixel gap at top-0:
-     *   Keeping only the bottom border so the header merges flush with the top.
-     */
-    <header className="sticky top-0 z-50 w-full border-b border-brand-border bg-brand-white p-4 shadow-sm">
-      {/* Desktop row */}
+    <header className="rounded-2xl border border-brand-border bg-brand-white p-4 shadow-sm">
+      {/* Desktop row — a 3-column grid so the nav links stay centered
+          regardless of how wide the logo or the actions cluster are. */}
       <div className="hidden items-center gap-4 md:grid md:grid-cols-[1fr_auto_1fr]">
         <Logo />
         <NavLinks className="flex items-center justify-center gap-6" />
         <HeaderActions className="flex items-center justify-end gap-3" />
       </div>
 
-      {/* Mobile row */}
+      {/* Mobile row — visible only below md breakpoint */}
       <div className="flex items-center justify-between gap-4 md:hidden">
         <Logo />
 
@@ -148,7 +141,9 @@ function Header() {
           aria-label="فتح القائمة"
           className="flex h-9 w-9 items-center justify-center rounded-lg border border-brand-border text-brand-text"
         >
-          <span className="text-lg leading-none">{isMenuOpen ? "×" : "☰"}</span>
+          <span className="text-lg leading-none">
+            {isMenuOpen ? "×" : "☰"}
+          </span>
         </button>
       </div>
 

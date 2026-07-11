@@ -19,7 +19,11 @@ function InstagramIcon() {
 function TikTokIcon() {
   return (
     <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/25 bg-white/10">
-      <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor">
+      <svg
+        viewBox="0 0 24 24"
+        className="h-6 w-6"
+        fill="currentColor"
+      >
         <path d="M15.5 3c.4 2.5 1.8 4.1 4.5 4.3v3.1c-1.6.1-3-.4-4.4-1.3v6.3c0 3.2-2.1 5.6-5.3 5.6-3 0-5.3-2.1-5.3-5.1 0-3.4 2.7-5.8 6.2-5.2v3.2c-1.6-.5-2.9.4-2.9 1.8 0 1.2.9 2.1 2.1 2.1 1.3 0 2.2-.8 2.2-2.5V3h2.9z" />
       </svg>
     </span>
