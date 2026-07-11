@@ -15,7 +15,7 @@ import { useRole } from "../context/RoleContext";
 import { DASHBOARD_DATA } from "../data/dashboardData";
 import { PRODUCTS } from "../data/productData";
 import ProductCard from "../components/ProductCard";
-import Sidebar from "../components/dashboard-Sidebar";
+import Sidebar from "../components/Dashboard-Sidebar";
 import SharedCard from "../components/SharedCard";
 import {
   COMPLETED_ITEMS,
