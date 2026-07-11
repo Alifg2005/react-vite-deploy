@@ -2,8 +2,7 @@ import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
-// Login/Register/Forgot-password bring their own minimal logo+back header
-// (see AuthLayout) and skip the site Header/Footer entirely.
+// These routes render their own minimal auth header — skip site chrome entirely.
 const NO_CHROME_ROUTES = ["/login", "/register", "/forgot-password"];
 
 function MainLayout({ children }) {
@@ -19,10 +18,21 @@ function MainLayout({ children }) {
   }
 
   return (
+    /*
+     * CHANGE 1 — removed any implicit top spacing from this wrapper.
+     * The outer div must start at the very top of the viewport with no
+     * margin or padding so the sticky Header can touch the top edge.
+     */
     <div dir="rtl" className="flex min-h-screen flex-col bg-brand-light font-body text-brand-text">
       <Header />
 
-      <main className="flex-1 p-5 pb-16">{children}</main>
+      {/*
+       * CHANGE 2 — kept side/bottom padding (p-5 pb-16) but removed any
+       * top padding (pt-*). Because Header uses `sticky` (not `fixed`),
+       * it stays in document flow and naturally pushes <main> down —
+       * no manual top offset is needed here.
+       */}
+      <main className="flex-1 px-5 pb-16 pt-5">{children}</main>
 
       <Footer />
     </div>
