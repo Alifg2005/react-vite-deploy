@@ -1,3 +1,4 @@
+/* Entry point — actual styles live in assets/styles/globals.css */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
@@ -31,6 +32,28 @@
   --c-hero-start: #7fb8b8;
   --c-hero-middle: #1394a0;
   --c-hero-end: #076b7c;
+
+  /* Light Mode
+  Added mini title colors for Schedules */
+  --c-schedule-emerald-bg: #a7f3d0;
+  --c-schedule-emerald-border: #10b981;
+  --c-schedule-emerald-text: #064e3b;
+
+  --c-schedule-blue-bg: #bfdbfe;
+  --c-schedule-blue-border: #3b82f6;
+  --c-schedule-blue-text: #1e3a8a;
+
+  --c-schedule-purple-bg: #e9d5ff;
+  --c-schedule-purple-border: #a855f7;
+  --c-schedule-purple-text: #581c87;
+
+  --c-schedule-amber-bg: #fde68a;
+  --c-schedule-amber-border: #f59e0b;
+  --c-schedule-amber-text: #78350f;
+
+  --c-schedule-rose-bg: #fecdd3;
+  --c-schedule-rose-border: #f43f5e;
+  --c-schedule-rose-text: #881337;
 }
 
 /* Dark theme — toggled by ThemeToggle via the .dark class on <html> */
@@ -49,6 +72,28 @@
   --c-hero-start: #12484f;
   --c-hero-middle: #0e6a75;
   --c-hero-end: #063a42;
+
+  /* Dark Mode
+  Added mini title colors for Schedules*/
+  --c-schedule-emerald-bg: #a7f3d0;
+  --c-schedule-emerald-border: #10b981;
+  --c-schedule-emerald-text: #064e3b;
+
+  --c-schedule-blue-bg: #bfdbfe;
+  --c-schedule-blue-border: #3b82f6;
+  --c-schedule-blue-text: #1e3a8a;
+
+  --c-schedule-purple-bg: #e9d5ff;
+  --c-schedule-purple-border: #a855f7;
+  --c-schedule-purple-text: #581c87;
+
+  --c-schedule-amber-bg: #fde68a;
+  --c-schedule-amber-border: #f59e0b;
+  --c-schedule-amber-text: #78350f;
+
+  --c-schedule-rose-bg: #fecdd3;
+  --c-schedule-rose-border: #f43f5e;
+  --c-schedule-rose-text: #881337;
 }
 
 
@@ -77,6 +122,15 @@ body {
   padding: 0;
 }
 
+/* Slightly larger type scale for the admin section only — Tailwind v4's
+   size utilities resolve through these theme variables, so redefining them
+   under a wrapper class scopes the bump without touching the public site. */
+.admin-scale {
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+}
+
 body {
   font-family: 'RH Zak', 'Segoe UI', Tahoma, Arial, sans-serif;
   background: var(--c-brand-light);
@@ -103,4 +157,34 @@ a {
 img {
   max-width: 100%;
   display: block;
+}
+
+@keyframes popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes auto-scroll-track {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes auto-scroll-pingpong {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(calc(-1 * var(--auto-scroll-distance, 0px)));
+  }
 }
